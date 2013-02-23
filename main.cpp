@@ -7,21 +7,21 @@
 #include <iostream>
 #include <time.h>
 #include <ctype.h>
-#define MIN 7
+#define MIN 1
 #define MAX 15
 
 
 class NameGenerator{
-	std::map< char, std::map< char, int > > mat;
+	std::map< char, std::map< char, std::map< char, int > > > mat;
 	
 	public:
 	
 	void update( std::string str ){
 		if( str.length() <= 0 )
 			return;
-		for( int i=0; i <= str.length() - 1; ++i ){
-			int* num = &mat[tolower(str[i])][str[i+1]];
-			*num += 1;
+		for( int i=0; i <= str.length() - 2; ++i ){
+			int* num = &mat[tolower(str[i])][str[i+1]][str[i+2]];
+			*num += i;
 		}
 	}
 
@@ -29,15 +29,25 @@ class NameGenerator{
 		char temp;
 		std::string result;
 
-		temp = rand()%26 + 97;
+	
+
+		if( mat.empty() )
+			return "";
+
+		do {
+			temp = rand()%26 + 97;
+			std::cout << "reroll...\n";
+		} while ( mat.find(temp) == mat.end() );
 
 		do {
 			std::vector<char> list;
 			result.push_back( temp );
 			for( auto i = mat[temp].begin(); i != mat[temp].end(); ++i ){
-				for( int k = i->second; k > 0; --k ){
-					list.push_back( i->first );
-				}
+				auto matrix = i->second;
+				for( auto j = matrix.begin(); j != matrix.end(); ++j)
+					for( int k = j->second; k > 0; --k ){
+						list.push_back( j->first );
+					}
 			}
 			if( list.size() != 0 )
 				temp = list.at( rand()%list.size() );
