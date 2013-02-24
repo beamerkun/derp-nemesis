@@ -62,9 +62,9 @@ class NameGenerator{
 
 				last = curr;								// zapisanie poprzednich znakow
 				curr = next;								//
-			} while (curr != '\0');
+			} while (curr != '\0' || last != '\0');
 
-			result = result.substr( 1, result.size() -1 );	// usuniecie znaku oznaczajacego poczatek slowa
+			result = result.substr( 1, result.size() - 1 );	// usuniecie znaku oznaczajacego poczatek slowa
 
 		} while ( result.size() < MIN || result.size() > MAX );
 
@@ -78,7 +78,7 @@ int main(){
 	srand( time(NULL) );
 	std::ifstream file;
 	file.open("dict");
-	while( !plik.eof() ){
+	while( file.good() ){
 		std::string temp;
 		file >> temp;
 		nam.update(temp);
