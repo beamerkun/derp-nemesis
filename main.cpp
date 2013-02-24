@@ -75,11 +75,11 @@ class NameGenerator{
 int main(){
 	NameGenerator nam;
 	srand( time(NULL) );
-	std::ifstream plik;
-	plik.open("baza");
+	std::ifstream file;
+	file.open("dict");
 	while( !plik.eof() ){
 		std::string temp;
-		plik >> temp;
+		file >> temp;
 		nam.update(temp);
 	}
 	std::cout << nam.generate() << std::endl;
