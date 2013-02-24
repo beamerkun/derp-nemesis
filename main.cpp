@@ -3,7 +3,7 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <sstream>
+#include <fstream>
 #include <iostream>
 #include <time.h>
 #include <ctype.h>
@@ -23,7 +23,7 @@ class NameGenerator{
 		*n += 1;
 		for( int i = 0; i <= str.length() - 2; ++i ){
 			int* num = &mat[tolower(str[i])][str[i+1]][str[i+2]];
-			*num += i+1;
+			*num += 1;
 		}
 	}
 
@@ -75,9 +75,11 @@ class NameGenerator{
 int main(){
 	NameGenerator nam;
 	srand( time(NULL) );
-	while( !std::cin.eof() ){
+	std::ifstream plik;
+	plik.open("baza");
+	while( !plik.eof() ){
 		std::string temp;
-		std::cin >> temp;
+		plik >> temp;
 		nam.update(temp);
 	}
 	std::cout << nam.generate() << std::endl;
