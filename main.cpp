@@ -7,7 +7,7 @@
 #include <iostream>
 #include <time.h>
 #include <ctype.h>
-#define MIN 3
+#define MIN 5
 #define MAX 15
 
 
@@ -23,7 +23,7 @@ class NameGenerator{
 		*n += 1;
 		for( int i = 0; i <= str.length() - 2; ++i ){
 			int* num = &mat[tolower(str[i])][str[i+1]][str[i+2]];
-			*num += i;
+			*num += i+1;
 		}
 	}
 
@@ -32,15 +32,18 @@ class NameGenerator{
 		std::string result;
 
 		do {
+			std::vector<char> list;
+
+			result.clear();
 			last = 255;
 
-			std::vector<char> list;
 			for( auto i = mat[last].begin(); i != mat[last].end(); ++i ){
 				list.push_back(i->first);
 			}
 			curr = list.at( rand()%list.size() );
 
 			do {
+				list.clear();
 				result.push_back( last );
 
 				for( auto i = mat[last].begin(); i != mat[last].end(); ++i ){
@@ -58,11 +61,12 @@ class NameGenerator{
 
 				last = curr;
 				curr = next;
-				list.clear();
 			} while (last != '\0' || curr != '\0');
+
+			result = result.substr( 1, result.size() -1 );
+
 		} while ( result.size() < MIN || result.size() > MAX );
 
-		result = result.substr( 1, result.size() -1 );
 		return result;
 	}
 
