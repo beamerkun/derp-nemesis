@@ -9,7 +9,7 @@
 #include <ctype.h>
 #define MIN 5
 #define MAX 15
-#define COEFF 2
+#define COEFF 0
 
 bool isVowel( char test ){
 	test = tolower(test);
