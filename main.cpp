@@ -60,8 +60,8 @@ class NameGenerator{
 				list.clear();
 				result.push_back( last );
 					
-				for( auto i = mat[last].begin(); i != mat[last].end(); ++i ){	// dodanie to tymczasowej listy kazdego znaku
-					auto matrix = i->second;									// tyle razy ile wystapił po dwóch wcześniejszych znakach
+				// dodanie to tymczasowej listy kazdego znaku
+				auto matrix = mat[last][curr];									// tyle razy ile wystapił po dwóch wcześniejszych znakach
 					for( auto j = matrix.begin(); j != matrix.end(); ++j){		// generowanego słowa
 						int bias;
 						if( !isVowel(j->first) ){
@@ -73,7 +73,6 @@ class NameGenerator{
 							list.push_back(j->first);				
 						}
 					}															//
-				}																//
 
 				if( list.empty() )							// jeśli po danym dwuznaku nigdy nie wystepowala zadna litera
 					next = '\0';							// zakończ generowanie
