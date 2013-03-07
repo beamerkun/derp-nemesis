@@ -37,7 +37,7 @@ do {
 	my $curr;
 	my $next;
 	
-	push @list, $_ for( keys %{$mat{$last}} );	# random-pick first letter from any letters
+	push @list, $_ for keys %{$mat{$last}};	# random-pick first letter from any letters
 	$curr = $list[rand($#list)];				#  that occured as first letter
 
 	do {
