@@ -1,8 +1,11 @@
 derp_nemesis
 ============
-simple word generator, generation algorithm is using character occurrence table generated from word-list specified.
+simple word generator 
+
+Algorithm is using character occurrence table generated from word-list specified.
 
 C++ and perl version included.
+
 Word-list included in _dict_ file is a list of elvish names, googled and typed into plain-text file.
 
 Usage
