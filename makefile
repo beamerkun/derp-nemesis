@@ -1,7 +1,7 @@
 all: name
 
 name: main.cpp
-	g++ main.cpp -std=c++11 -g -o name	
+	g++ main.cpp -std=c++11 -g -o derp-nemesis	
 
 clean:
-	rm -rf name
+	rm -rf derp-nemesis

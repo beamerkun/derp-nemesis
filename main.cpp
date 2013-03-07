@@ -9,28 +9,22 @@
 #include <ctype.h>
 #define MIN 5
 #define MAX 15
-#define COEFF 0
-
-bool isVowel( char test ){
-	test = tolower(test);
-	if( test == 'a' || test == 'e' || test == 'i' || test == 'o' || test == 'u' )
-		return true;
-	else
-		return false;
-}
 
 class NameGenerator{
-	std::map< char, std::map< char, std::map< char, int > > > mat;	// macierz trójwymiarowa przechowująca prawdopodobieństwo 
-																	// wystąpienia danego znaku po wystąpieniu 2 innych
+	std::map< char, std::map< char, std::map< char, int > > > mat;	// 3 dimensional matrix containing how many times any letter
+																	// appeared after 2 another letters
 
 	public:
 
+	NameGenerator( int seed = time(NULL) ) : mat() {
+		srand( seed );
+	}
 	void update( std::string str ){
 		if( str.length() <= 0 || str[0] == '\n')
 			return;
-		mat[255][str[0]][str[1]] += 1;		// char = 255 to oznacza początek słowa
+		mat[255][str[0]][str[1]] += 1;						// char = 255 marks start of word
 		for( int i = 0; i <= str.length() - 2; ++i ){
-			mat[str[i]][str[i+1]][str[i+2]] += 1;	// zwiekszenie licznika wystąpień znaku 
+			mat[str[i]][str[i+1]][str[i+2]] += 1;			// increase counters corresponding to letters appearing in 'str'
 		}
 	}
 
@@ -40,59 +34,39 @@ class NameGenerator{
 
 		do {
 			std::vector<char> list;
-			int vow = 0;
-			int cons = 0;
 
 			result.clear();
-			last = 255;		// generowanie słowa zaczynamy od znaku początku słowa, duh...
+			last = 255;										// any word begins with 'word-start' char
 
 			for( auto i = mat[last].begin(); i != mat[last].end(); ++i ){	// wylosowanie pierwszej litery nowego słowa
 				list.push_back(i->first);									// sposrod wszystkich które wystąpiły jako pierwsza
 			}																// litera słowa z słownika
 			curr = list.at( rand()%list.size() );							//
 			
-			if ( isVowel(curr) )
-				vow = 1;
-			else
-				cons = 1;
-
-			do {								// pętla generowania słowa
+			do {											// word generation loop
 				list.clear();
 				result.push_back( last );
 					
-				// dodanie to tymczasowej listy kazdego znaku
-				auto matrix = mat[last][curr];									// tyle razy ile wystapił po dwóch wcześniejszych znakach
-					for( auto j = matrix.begin(); j != matrix.end(); ++j){		// generowanego słowa
-						int bias;
-						if( !isVowel(j->first) ){
-							bias = vow;
-						} else {
-							bias = cons;
-						}
-						for( int k = j->second + j->second * COEFF * bias; k > 0; --k ){//
-							list.push_back(j->first);				
-						}
+				auto matrix = mat[last][curr];									// add any letter which ever appeared after 'last' and 'curr'
+					for( auto j = matrix.begin(); j != matrix.end(); ++j){		// as many times, as it had appeared
+						for( int k = j->second; k > 0; --k ){					//
+							list.push_back(j->first);							//
+						}														//
 					}															//
 
-				if( list.empty() )							// jeśli po danym dwuznaku nigdy nie wystepowala zadna litera
-					next = '\0';							// zakończ generowanie
+
+				if( list.empty() )							// if theres no chance for any letter to appear after 'last' and 'curr'
+					next = '\0';							// finish generating name
 				else
-					next = list.at( rand()%list.size() );   // w przeciwnym wypadku wylosuj znak z listy
+					next = list.at( rand()%list.size() );   // if there is some chance, pick random letter from 'list'
 
-				if( isVowel(next) ){
-					vow		=	0;
-					cons	+=	1;
-				} else {
-					vow		+=	1;
-					cons	=	0;
-				}
-				last = curr;								// zapisanie poprzednich znakow
+				last = curr;								// prepare next loop iteration
 				curr = next;								//
-			} while (curr != '\0' && last != '\0') ;
+			} while (curr != '\0' && last != '\0') ;		// '\0' marks end of word
 
-			result = result.substr( 1, result.size() - 1 );	// usuniecie znaku oznaczajacego poczatek slowa
+			result = result.substr( 1, result.size() - 1 );	// delete 'word-start' mark from result
 
-		} while ( result.size() < MIN || result.size() > MAX );
+		} while ( result.size() < MIN || result.size() > MAX ); // if word isn't short/long enough, generate another word
 
 		return result;
 	}
@@ -101,7 +75,6 @@ class NameGenerator{
 
 int main(){
 	NameGenerator nam;
-	srand( time(NULL) );
 	std::ifstream file;
 	file.open("dict");
 	while( file.good() ){
