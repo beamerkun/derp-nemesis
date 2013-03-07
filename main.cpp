@@ -19,6 +19,7 @@ class NameGenerator{
 	NameGenerator( int seed = time(NULL) ) : mat() {
 		srand( seed );
 	}
+
 	void update( std::string str ){
 		if( str.length() <= 0 || str[0] == '\n')
 			return;
