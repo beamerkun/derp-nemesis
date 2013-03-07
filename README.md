@@ -13,4 +13,4 @@ Usage
 ```
 $ derp_nemesis (word-list)
 ```
-if word-list file is not specified, file _dict_ is used)
+if word-list file is not specified, file _dict_ is used
