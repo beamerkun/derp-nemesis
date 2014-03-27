@@ -1,4 +1,4 @@
-derp_nemesis
+markov_chain
 ============
 simple word generator 
 
@@ -11,6 +11,6 @@ Word-list included in _dict_ file is a list of elvish names, googled and typed i
 Usage
 -----
 ```
-$ derp_nemesis (word-list)
+$ markov_chain (word-list)
 ```
 if word-list file is not specified, file _dict_ is used
